@@ -1,0 +1,595 @@
+/* -------------------------------------------------------------------------- */
+/* 1. VARIABLES                               */
+/* -------------------------------------------------------------------------- */
+
+:root {
+  --color-primary: #0000ff;
+  --color-primary2: #5b5bff;
+  --color-secondary: #ffffff;
+  --color-glow: rgba(103, 118, 255, 0.7);
+  --color-glow-solid: #7b82ffc6;
+  --spacing-unit: 1rem;
+  --border-width: 3px
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. GLOBAL STYLES                             */
+/* -------------------------------------------------------------------------- */
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+
+body {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  font-family: 'Press Start 2P', monospace;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  background-size: cover;
+}
+
+#react-target {
+  width: 100%;
+  height: 100%;
+}
+
+/* Main app container acting as the CRT monitor bezel */
+.app-container {
+  box-shadow: 0 0 1rem var(--color-glow);
+  height: 100%;
+  position: relative;
+  padding: var(--spacing-unit);
+  overflow: hidden;
+  
+}
+
+.app-container::after {
+    /* These properties are required for the vignette to work */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    /* Your existing radial gradient */
+    background: radial-gradient(circle, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.31) 100%);
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. CRT-SPECIFIC EFFECTS                          */
+/* -------------------------------------------------------------------------- */
+
+/* Flicker and subtle distortion animation */
+@keyframes textflicker {
+  from {
+    text-shadow: 1px 0 0 var(--color-primary), -1px 0 0 #4f0012;
+  }
+  to {
+    text-shadow: 2px 0.5px 2px var(--color-primary), -2px -0.5px 2px #004f22;
+  }
+}
+
+/* Scanlines overlay */
+.app-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+              linear-gradient(90deg, rgba(0, 0, 255, 0.01), rgba(0, 0, 255, 0.01));
+  background-size: 100% 2px, 2px 100%;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Text glow effect */
+.text-glow {
+  text-shadow: 0 0 5px var(--color-glow-solid), 0 0 10px var(--color-glow-solid);
+}
+
+/* Glitch effect for text corruption */
+@keyframes glitch {
+  0% { transform: skew(0deg); }
+  25% { transform: skew(5deg); }
+  50% { transform: skew(-5deg); }
+  75% { transform: skew(2deg); }
+  100% { transform: skew(-3deg); }
+}
+
+.glitch-text {
+  animation: glitch 0.3s infinite;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. SCREEN STYLES                              */
+/* -------------------------------------------------------------------------- */
+
+/* Landing page */
+.landing-page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: center;
+  height: 100%;
+  justify-content: center;
+  padding: var(--spacing-unit);
+}
+
+.ascii-art {
+  font-size: 1vw;
+  white-space: pre;
+  text-shadow: 0 0 5px var(--color-glow-solid);
+  margin-bottom: var(--spacing-unit);
+}
+
+
+
+.report-section {
+  max-width: 80%;
+  text-align: left;
+  padding: var(--spacing-unit);
+  overflow-y: auto;
+  max-height: 40vh;
+  margin: var(--spacing-unit) 0;
+  font-size: clamp(0.6rem, 1.5vw, 0.9rem);
+  line-height: 1.5;
+  
+}
+
+.report-container {
+  flex-grow: 1; /* Allows it to take up available vertical space */
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: stretch;
+  overflow-y: auto;
+  max-width: 90%;
+  padding: var(--spacing-unit);
+  line-height: 1.5;
+}
+
+.report-text {
+    font-family: 'Press Start 2P', monospace;
+    white-space: pre-wrap;
+    font-size: clamp(0.6rem, 1.5vw, 0.9rem);
+    text-align: left;
+    max-width: 100%;
+}
+
+.button-container-horizontal {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: var(--spacing-unit);
+  margin-top: var(--spacing-unit) * 2;
+  margin-bottom: var(--spacing-unit);
+  padding: 3rem;
+  line-height: 1.5;
+  align-items: center;
+}
+
+
+@media (max-width: 768px) {
+  .button-container-horizontal {
+    flex-direction: column;
+  }
+}
+
+/* Active Room & Archive View */
+.message-container {
+  height: 100%;
+  overflow-y: auto;
+  padding: var(--spacing-unit);
+  line-height: 1.6;
+}
+
+.message {
+  margin-bottom: var(--spacing-unit);
+  border-bottom: 1px dashed var(--color-primary);
+  padding-bottom: var(--spacing-unit);
+}
+
+.message-narrator {
+  color: var(--color-primary);
+  text-align: left;
+}
+
+.message-observer {
+  color: var(--color-primary);
+  text-align: right;
+  /* Observer's text gets a subtle glitch effect */
+  text-shadow: 0 0 2px var(--color-glow-solid);
+}
+
+/* Anomaly Screen */
+.anomaly-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-secondary);
+  color: #00ff04; /* Red for the flash */
+  font-size: clamp(1rem, 5vw, 4rem);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: flash 0.3s forwards;
+  text-shadow: 0 0 10px #00ff04;
+  z-index: 100;
+}
+
+@keyframes flash {
+  0% { background-color: rgba(255, 0, 0, 0); }
+  50% { background-color: rgba(0, 255, 4, 0.5); }
+  100% { background-color: rgba(255, 0, 0, 0); }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 5. UI ELEMENTS                              */
+/* -------------------------------------------------------------------------- */
+
+/* Buttons */
+.button-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-unit);
+  margin-top: var(--spacing-unit) * 2;
+}
+
+.neon-button {
+  background-color: transparent;
+  border: var(--border-width) solid var(--color-primary);
+  color: var(--color-primary);
+  padding: var(--spacing-unit) 2rem;
+  font-family: inherit;
+  font-size: clamp(0.7rem, 1.5vw, 1rem);
+  cursor: pointer;
+  text-shadow: 0 0 5px var(--color-glow);
+  box-shadow: 0 0 10px var(--color-glow);
+  transition: all 0.2s ease-in-out;
+  line-height: 1.5;
+}
+
+.neon-button-secondary {
+  background-color: transparent;
+  border: none;
+  color: var(--color-primary);
+  padding: var(--spacing-unit) 2rem;
+  font-family: inherit;
+  font-size: clamp(0.7rem, 1.5vw, 1rem);
+  cursor: pointer;
+  text-shadow: 0 0 5px var(--color-glow);
+  transition: all 0.2s ease-in-out;
+  line-height: 1.5;
+}
+
+.neon-button-secondary:hover {
+
+  text-shadow: 0 0 10px var(--color-primary);
+}
+
+.neon-button:hover {
+  background-color: rgba(255, 175, 1, 0.1);
+  text-shadow: 0 0 10px var(--color-primary);
+  box-shadow: 0 0 20px var(--color-glow), inset 0 0 20px var(--color-glow);
+}
+
+.neon-button:active {
+  transform: scale(0.98);
+  box-shadow: 0 0 5px var(--color-glow);
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+  text-shadow: none;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 6. RESPONSIVENESS                           */
+/* -------------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+  .app-container {
+    width: 95vw;
+    height: 95vh;
+  }
+  .report-section {
+    width: 90%;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 7. MODAL                           */
+/* -------------------------------------------------------------------------- */
+
+/* Modal overlay to cover the whole screen */
+.anomaly-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9); /* Dark, semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's on top of everything else */
+  
+  /* Initial state is hidden */
+  opacity: 0;
+  visibility: hidden;
+  animation: modal-flash 3s forwards;
+}
+
+/* Modal content box */
+.anomaly-modal-content {
+  border: 4px solid #00ff00; /* A red border to signify danger */
+  box-shadow: 0 0 20px #00ff00, inset 0 0 20px #00ff00;
+  background-color: #ffffff;
+  padding: 2rem 4rem;
+  color: #00ff00;
+  text-align: center;
+}
+
+.anomaly-text {
+  font-size: clamp(1rem, 5vw, 4rem);
+  text-shadow: 0 0 10px #00ff00;
+  margin: 0;
+}
+
+/* New animation for the modal's appearance */
+@keyframes modal-flash {
+  0% { opacity: 0; visibility: visible; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+/* Remove the old anomaly screen styles if they exist */
+.anomaly-screen {
+  display: none;
+}
+
+
+/* client/main.css (add to existing styles) */
+
+/* Archive List Container */
+.archive-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: var(--spacing-unit);
+  overflow: hidden;
+}
+
+.archive-title {
+  font-size: clamp(0.9rem, 2.5vw, 1.5rem);
+  text-align: center;
+  margin-bottom: var(--spacing-unit) * 2;
+  text-shadow: 0 0 8px var(--color-glow-solid);
+  padding-bottom: 3rem;
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.archive-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+/* Archive List Item Styling */
+.archive-list-item {
+    flex-direction: column;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-unit);
+  padding: var(--spacing-unit) 0;
+  cursor: pointer;
+  border-bottom: 1px dashed var(--color-primary);
+  transition: color 0.2s ease-in-out;
+  color: var(--color-primary);
+  text-shadow: 0 0 5px var(--color-glow-solid);
+}
+
+.archive-list-item:hover {
+  color: var(--color-primary);
+}
+
+.archive-item-header {
+    display: flex;
+    gap: 3rem;
+    color: rgb(0, 136, 255);
+    width: 100%;
+    justify-content: space-between;
+}
+
+.archive-item-echo {
+  margin: 0;
+  flex-grow: 1;
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+.header-container {
+    display: flex;
+    gap: 2vw;
+    height: 10%;
+    align-items: center;
+}
+
+/* client/main.css (add to existing styles) */
+
+/* Archive View Header */
+.archive-view-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding-bottom: var(--spacing-unit);
+  border-bottom: 2px solid var(--color-primary);
+  margin-bottom: var(--spacing-unit);
+}
+
+.archive-view-container {
+    display: flex;
+    flex-direction: column;
+    height: 90%;
+}
+
+.archive-view-title {
+  margin: 0;
+  font-size: clamp(0.7rem, 2vw, 1rem);
+}
+
+/* Transcript container */
+.message-transcript-list {
+  overflow-y: auto;
+}
+
+/* Individual message item */
+.transcript-message-item {
+  border: 1px solid transparent; /* Transparent border for hover effect */
+  padding: var(--spacing-unit);
+  margin-bottom: var(--spacing-unit);
+  transition: all 0.2s ease-in-out;
+  white-space: pre-wrap;  
+  line-height: 1.5;
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}
+
+.transcript-message-item:hover {
+  border-color: var(--color-primary);
+  box-shadow: inset 0 0 5px var(--color-glow);
+}
+
+.message-sender-prefix {
+  font-weight: bold;
+  color: rgb(0, 136, 255);
+  text-shadow: 0 0 5px var(--color-glow-solid);
+}
+
+
+/* client/main.css (add to existing styles) */
+
+/* Active Room Container */
+.active-room-container {
+  display: flex;
+  flex-direction: column;
+  height: 90%;
+  padding: var(--spacing-unit);
+
+}
+
+.live-message-list {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.live-message-item {
+  margin-bottom: 4.5rem;
+  line-height: 1.5;
+  color: var(--color-primary);
+  text-shadow: 0 0 5px var(--color-glow-solid);
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}
+
+.live-message-item:hover {
+  border-color: var(--color-primary);
+}
+
+.live-message-content {
+  white-space: pre-wrap; /* Preserve formatting for new lines */
+}
+
+.pump-messages {
+    border-left: #0000ff;
+    border-left-style: outset;
+    padding-left: 2rem;
+
+}
+
+.live-message-text {
+    width:70%;
+    min-width: 70%;
+}
+
+/* Blinking cursor for the typing animation */
+.cursor {
+  animation: blink 1s infinite;
+  vertical-align: top;
+  font-weight: bold;
+  font-size: 1.2em; /* Ensure cursor is visible */
+}
+
+@keyframes blink {
+  from, to { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 0;
+}
+
+.dialog-content {
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  width: 90%;
+}
+
+.dialog-content p {
+    text-align: left;
+    margin-bottom: 3rem;
+    line-height: 1.2rem;
+}
+
+.dialog-content h2, h3 {
+    color: #5b5bff;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  font-family: 'Press Start 2P', monospace;
+  color: #0000ff;
+}
+
