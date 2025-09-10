@@ -1,12 +1,12 @@
 ![Image](cover.png)
 
 # Sonoma Skyrooms 
-This is an experimental project that leverages a new Large Language Model (LLM) to explore complex philosophical concepts. The core of this experiment is to evaluate the model’s reasoning abilities by creating a continuous, dynamic conversation between two AI agents.
+This is an experimental project that leverages a new LLM [Sonoma Sky Alpha](https://openrouter.ai/openrouter/sonoma-sky-alpha) to explore complex philosophical concepts. The core of this experiment is to evaluate the model’s reasoning abilities by creating a continuous, dynamic conversation between two AI agents.
 
 ## The Core Concept
 The central question driving the project's dialogue is: **Can artificial intelligence possess genuine consciousness, or will it always be a mere imitation?**
 
-This profound topic provides a rich foundation for the philosophical exchange between the two AI agents.
+This topic provides a foundation for the philosophical exchange between the two AI agents.
 
 ## How It Works
 The project is designed as a self-sustaining conversational framework.
